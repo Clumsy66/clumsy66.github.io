@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For You ❤️</title>
+
+<style>
+/* ===== PAGE BACKGROUND ===== */
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffe6f0, #ffffff);
+  font-family: Arial, sans-serif;
+}
+
+/* ===== MAIN CARD ===== */
+.card {
+  width: 400px; /* 🔧 CHANGE CARD WIDTH HERE */
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 25px; /* 🔧 CHANGE ROUNDNESS HERE */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+/* ===== IMAGE CONTAINER ===== */
+.image-container {
+  display: flex;
+  justify-content: center; /* 🔧 CHANGE horizontal alignment: center / flex-start / flex-end */
+  align-items: center;     /* 🔧 CHANGE vertical alignment */
+  margin-bottom: 20px;
+}
+
+/* ===== PNG IMAGE ===== */
+.image-container img {
+  width: 150px; /* 🔧 CHANGE IMAGE SIZE HERE */
+  position: relative;
+
+  /* 🔧 FINE POSITION ADJUSTMENTS */
+  top: 0px;     /* move up/down */
+  left: 0px;    /* move left/right */
+}
+
+/* ===== TEXT ===== */
+h2 {
+  margin-bottom: 30px;
+  color: #e60073;
+}
+
+/* ===== BUTTONS ===== */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.yes {
+  background: #e60073;
+  color: white;
+}
+
+.no {
+  background: #cccccc;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <!-- ===== IMAGE SECTION ===== -->
+  <div class="image-container">
+    <!-- 🔧 CHANGE IMAGE FILE NAME HERE -->
+    <img src="your-image.png" alt="Cute Image">
+  </div>
+
+  <h2>Will you be my Valentine? 💖</h2>
+
+  <div class="buttons">
+    <button class="yes" onclick="sayYes()">Yes 💕</button>
+    <button class="no" onclick="moveNo(this)">No 🙈</button>
+  </div>
+
+</div>
+
+<script>
+function sayYes() {
+  document.querySelector(".card").innerHTML =
+    "<h2>YAY! ❤️ You made me the happiest person alive! 💘</h2>";
+}
+
+function moveNo(button) {
+  button.style.position = "absolute";
+  button.style.top = Math.random() * 80 + "%";
+  button.style.left = Math.random() * 80 + "%";
+}
+</script>
+
+</body>
+</html>
