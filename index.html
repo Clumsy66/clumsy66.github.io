@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <title>For You ❤️</title>
 
+<!-- Romantic Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
 <style>
-/* ===== PAGE BACKGROUND ===== */
 body {
   margin: 0;
   height: 100vh;
@@ -13,71 +15,76 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #ffe6f0, #ffffff);
-  font-family: Arial, sans-serif;
+  font-family: 'Dancing Script', cursive;
+  overflow: hidden;
 }
 
-/* ===== MAIN CARD ===== */
+/* ===== CARD ===== */
 .card {
-  width: 400px; /* 🔧 CHANGE CARD WIDTH HERE */
+  width: 420px;
   padding: 40px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 25px; /* 🔧 CHANGE ROUNDNESS HERE */
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 25px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
   text-align: center;
   backdrop-filter: blur(10px);
+  z-index: 10;
 }
 
-/* ===== IMAGE CONTAINER ===== */
+/* ===== IMAGE ===== */
 .image-container {
   display: flex;
-  justify-content: center; /* 🔧 CHANGE horizontal alignment: center / flex-start / flex-end */
-  align-items: center;     /* 🔧 CHANGE vertical alignment */
+  justify-content: center; /* 🔧 change alignment here */
   margin-bottom: 20px;
 }
 
-/* ===== PNG IMAGE ===== */
 .image-container img {
-  width: 150px; /* 🔧 CHANGE IMAGE SIZE HERE */
-  position: relative;
-
-  /* 🔧 FINE POSITION ADJUSTMENTS */
-  top: 0px;     /* move up/down */
-  left: 0px;    /* move left/right */
+  width: 170px; /* 🔧 change image size here */
+  transition: 0.4s ease;
 }
 
 /* ===== TEXT ===== */
 h2 {
-  margin-bottom: 30px;
+  font-size: 34px;
   color: #e60073;
+  min-height: 60px;
 }
 
 /* ===== BUTTONS ===== */
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
 button {
-  padding: 10px 25px;
-  font-size: 16px;
-  border-radius: 20px;
+  padding: 12px 30px;
+  font-size: 22px;
+  border-radius: 30px;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s ease;
+  font-family: 'Dancing Script', cursive;
 }
 
 .yes {
   background: #e60073;
   color: white;
+  margin-right: 15px;
+  transform: scale(1);
 }
 
 .no {
   background: #cccccc;
+  transform: scale(1);
 }
 
-button:hover {
-  transform: scale(1.1);
+/* ===== CONFETTI & HEARTS ===== */
+.confetti, .heart {
+  position: absolute;
+  top: -20px;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 </style>
 </head>
@@ -86,34 +93,116 @@ button:hover {
 
 <div class="card">
 
-  <!-- ===== IMAGE SECTION ===== -->
   <div class="image-container">
-    <!-- 🔧 CHANGE IMAGE FILE NAME HERE -->
-    <img src="SUAR_1.jpg" alt="Cute Image">
+    <!-- 🔧 CHANGE IMAGE FILE NAMES HERE -->
+    <img id="mainImage" src="image1.png">
   </div>
 
-  <h2>Will you be my Valentine? 💖</h2>
+  <!-- 🔧 CHANGE TEXT HERE -->
+  <h2 id="mainText">Will you be my Valentine? 💖</h2>
 
-  <div class="buttons">
-    <button class="yes" onclick="sayYes()">Yes 💕</button>
-    <button class="no" onclick="moveNo(this)">No 🙈</button>
-  </div>
+  <button class="yes" id="yesBtn" onclick="celebrate()">Yes 💕</button>
+  <button class="no" id="noBtn" onclick="handleNo()">No 🙈</button>
 
 </div>
 
 <script>
-function sayYes() {
-  document.querySelector(".card").innerHTML =
-    "<h2>YAY! ❤️ You made me the happiest person alive! 💘</h2>";
+
+let noCount = 0;
+let stage = 0;
+
+const image = document.getElementById("mainImage");
+const text = document.getElementById("mainText");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+/* 🔧 EDIT YOUR IMAGES + TEXT HERE */
+const stages = [
+  {
+    img: "image1.png",
+    text: "Will you be my Valentine? 💖"
+  },
+  {
+    img: "image2.png",
+    text: "Are you really sure? 🥺"
+  },
+  {
+    img: "image3.png",
+    text: "Last chance… I might cry 😭❤️"
+  }
+];
+
+function handleNo() {
+  noCount++;
+
+  if (noCount === 3) {
+    stage = 1;
+    updateStage();
+  }
+
+  if (noCount === 6) {
+    stage = 2;
+    updateStage();
+  }
 }
 
-function moveNo(button) {
-  button.style.position = "absolute";
-  button.style.top = Math.random() * 80 + "%";
-  button.style.left = Math.random() * 80 + "%";
+function updateStage() {
+  image.src = stages[stage].img;
+  text.innerHTML = stages[stage].text;
+
+  // Yes grows
+  yesBtn.style.transform = `scale(${1 + stage * 0.4})`;
+
+  // No shrinks
+  noBtn.style.transform = `scale(${1 - stage * 0.3})`;
 }
+
+function celebrate() {
+
+  document.querySelector(".card").innerHTML =
+    "<h2 style='font-size:45px;'>YAYYY!!! 💘❤️</h2>";
+
+  createConfetti();
+  createHearts();
+}
+
+/* ===== CONFETTI FUNCTION ===== */
+function createConfetti() {
+  for (let i = 0; i < 60; i++) {
+    let conf = document.createElement("div");
+    conf.className = "confetti";
+    conf.style.left = Math.random() * 100 + "vw";
+    conf.style.width = "8px";
+    conf.style.height = "8px";
+    conf.style.background = randomColor();
+    conf.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    document.body.appendChild(conf);
+
+    setTimeout(() => conf.remove(), 5000);
+  }
+}
+
+/* ===== HEART FUNCTION ===== */
+function createHearts() {
+  for (let i = 0; i < 40; i++) {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 20 + 20) + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+  }
+}
+
+function randomColor() {
+  const colors = ["#ff4d6d", "#ff85a2", "#ffd6e0", "#ff99cc", "#ff66b2"];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
 </script>
 
 </body>
 </html>
-
