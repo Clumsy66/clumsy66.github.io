@@ -4,281 +4,32 @@
 <meta charset="UTF-8">
 <title>For You ❤️</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<!-- Romantic Font -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
 body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #ffe6f0, #ffffff);
-  font-family: 'Dancing Script', cursive;
-  overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: 'Great Vibes', cursive;
+    text-align: center;
 }
 
-/* ===== CARD ===== */
-.card {
-  width: 420px;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 25px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-  text-align: center;
-  backdrop-filter: blur(10px);
-  z-index: 10;
-  position: relative;
-}
-
-/* ===== IMAGE ===== */
-.image-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.image-container img {
-  width: 170px;
-  transition: 0.4s ease;
-}
-
-/* ===== TEXT ===== */
-h2 {
-  font-size: 34px;
-  color: #e60073;
-  min-height: 60px;
-}
-
-/* ===== BUTTONS ===== */
-button {
-  padding: 12px 30px;
-  font-size: 22px;
-  border-radius: 30px;
-  border: none;
-  cursor: pointer;
-  transition: 0.25s ease;
-  font-family: 'Dancing Script', cursive;
-}
-
-.yes {
-  background: #e60073;
-  color: white;
-  margin-right: 15px;
-}
-
-.no {
-  background: #cccccc;
-  position: relative;
-}
-
-/* runaway mode */
-.runaway {
-  position: fixed !important;
-  z-index: 999;
-}
-
-/* ===== CONFETTI & HEARTS ===== */
-.confetti, .heart {
-  position: absolute;
-  top: -20px;
-  animation: fall linear forwards;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(360deg);
-    opacity: 0;
-  }
+h1 {
+    font-size: 60px;
+    color: white;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
-
-  <div class="image-container">
-    <img id="mainImage" src="image1.png">
-  </div>
-
-  <h2 id="mainText">
-    Ms. Baby, kya aap is pyaare se suar ki suarin banengi is Valentine's day par?
-  </h2>
-
-  <button class="yes" id="yesBtn" onclick="celebrate()">Yes 💕</button>
-  <button class="no" id="noBtn" onclick="handleNo()">No 🙈</button>
-
-</div>
-
-<script>
-
-let noCount = 0;
-let stage = 0;
-let runawayEnabled = false;
-
-const image = document.getElementById("mainImage");
-const text = document.getElementById("mainText");
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-
-const stages = [
-  {
-    img: "image1.png",
-    text: "Ms. Baby, kya aap is pyaare se suar ki suarin banengi is Valentine's day par?"
-  },
-  {
-    img: "image2.png",
-    text: "Galti se no dab gaya hoga, thoos thoos ke ungli bhi moti ho gayi hai"
-  },
-  {
-    img: "image3.png",
-    text: "Idhar sun, zyada nahi ho raha tera. Chup chaap yes daba"
-  }
-];
-
-function handleNo() {
-
-  noCount++;
-
-  if (noCount === 3) {
-    stage = 1;
-    updateStage();
-  }
-
-  if (noCount === 6) {
-    stage = 2;
-    updateStage();
-  }
-
-}
-
-function updateStage() {
-
-  image.src = stages[stage].img;
-  text.innerHTML = stages[stage].text;
-
-  yesBtn.style.transform = `scale(${1 + stage * 0.4})`;
-  noBtn.style.transform = `scale(${1 - stage * 0.3})`;
-
-  // Enable runaway at stage 3
-  if (stage === 2) {
-    runawayEnabled = true;
-    noBtn.classList.add("runaway");
-  }
-
-}
-
-/* ===== RUNAWAY LOGIC ===== */
-
-document.addEventListener("mousemove", function(e) {
-
-  if (!runawayEnabled) return;
-
-  const rect = noBtn.getBoundingClientRect();
-
-  const distance = Math.hypot(
-    e.clientX - (rect.left + rect.width / 2),
-    e.clientY - (rect.top + rect.height / 2)
-  );
-
-  if (distance < 120) {
-
-    const padding = 20;
-
-    const newX = Math.random() * (window.innerWidth - rect.width - padding);
-    const newY = Math.random() * (window.innerHeight - rect.height - padding);
-
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
-
-  }
-
-});
-
-
-function celebrate() {
-
-  document.querySelector(".card").innerHTML =
-  `
-    <h2 style="font-size:45px;">
-      Date pakkii!!!! Rishta leke aa raha hun
-    </h2>
-
-    <div style="margin-top:20px;">
-      <img src="blush.gif" style="
-        width:240px;
-        border-radius:20px;
-        box-shadow:0 15px 35px rgba(0,0,0,0.25);
-      ">
-    </div>
-  `;
-
-  createConfetti();
-  createHearts();
-
-}
-
-/* ===== CONFETTI ===== */
-
-function createConfetti() {
-
-  for (let i = 0; i < 60; i++) {
-
-    let conf = document.createElement("div");
-
-    conf.className = "confetti";
-    conf.style.left = Math.random() * 100 + "vw";
-    conf.style.width = "8px";
-    conf.style.height = "8px";
-    conf.style.background = randomColor();
-    conf.style.animationDuration = (Math.random() * 3 + 2) + "s";
-
-    document.body.appendChild(conf);
-
-    setTimeout(() => conf.remove(), 5000);
-
-  }
-
-}
-
-/* ===== HEARTS ===== */
-
-function createHearts() {
-
-  for (let i = 0; i < 40; i++) {
-
-    let heart = document.createElement("div");
-
-    heart.className = "heart";
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (Math.random() * 20 + 20) + "px";
-    heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
-
-    document.body.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 6000);
-
-  }
-
-}
-
-function randomColor() {
-
-  const colors = [
-    "#ff4d6d",
-    "#ff85a2",
-    "#ffd6e0",
-    "#ff99cc",
-    "#ff66b2"
-  ];
-
-  return colors[Math.floor(Math.random() * colors.length)];
-
-}
-
-</script>
+<h1>Happy Valentine's Day my only love 💋</h1>
 
 </body>
 </html>
