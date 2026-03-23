@@ -81,10 +81,10 @@ body {
     transform: translateY(0) translateX(0) rotate(0deg);
   }
   50% {
-    transform: translateY(-50vh) translateX(20px) rotate(180deg);
+    transform: translateY(-50vh) translateX(25px) rotate(180deg);
   }
   100% {
-    transform: translateY(-110vh) translateX(-20px) rotate(360deg);
+    transform: translateY(-110vh) translateX(-25px) rotate(360deg);
     opacity: 0;
   }
 }
@@ -95,11 +95,11 @@ body {
 <body>
 
 <!-- MUSIC -->
-<audio id="bgMusic" loop>
+<audio id="bgMusic" loop autoplay>
   <source src="your-music.mp3" type="audio/mp3">
 </audio>
 
-<button class="music-btn" id="musicBtn">▶</button>
+<button class="music-btn" id="musicBtn">⏸</button>
 
 <div class="container">
   <div id="text" class="text-box"></div>
@@ -126,13 +126,15 @@ textEl.innerHTML = texts[index];
 
 /* NEXT TEXT */
 arrow.addEventListener("click", () => {
+
   index++;
 
   if (index < texts.length) {
     changeText(texts[index]);
   } else {
-    showFinal();
+    arrow.style.display = "none"; // stop at last text
   }
+
 });
 
 /* TRANSITION */
@@ -145,22 +147,7 @@ function changeText(newText) {
   }, 300);
 }
 
-/* FINAL */
-function showFinal() {
-  arrow.style.display = "none";
-
-  textEl.style.opacity = 0;
-
-  setTimeout(() => {
-    textEl.innerHTML = "Date pakki!!!! 💖";
-    textEl.style.fontSize = "60px";
-    textEl.style.opacity = 1;
-  }, 300);
-
-  startHearts();
-}
-
-/* ❤️ ADVANCED HEARTS */
+/* ❤️ CONTINUOUS HEARTS */
 function startHearts() {
 
   setInterval(() => {
@@ -169,17 +156,13 @@ function startHearts() {
     heart.className = "heart";
     heart.innerHTML = "💖";
 
-    // random horizontal start
     heart.style.left = Math.random() * 100 + "vw";
 
-    // size variation
     let size = Math.random() * 25 + 15;
     heart.style.fontSize = size + "px";
 
-    // speed variation
     heart.style.animationDuration = (Math.random() * 4 + 4) + "s";
 
-    // slight blur for depth effect
     heart.style.filter = `blur(${Math.random() * 1}px)`;
 
     document.body.appendChild(heart);
@@ -190,20 +173,30 @@ function startHearts() {
 
 }
 
+/* START HEARTS IMMEDIATELY */
+startHearts();
+
 /* 🎵 MUSIC CONTROL */
 const music = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 
-let playing = false;
+/* AUTOPLAY FALLBACK (important for Chrome etc.) */
+window.addEventListener("click", () => {
+  if (music.paused) {
+    music.play().catch(() => {});
+  }
+}, { once: true });
+
+let playing = true;
 
 musicBtn.addEventListener("click", () => {
 
-  if (!playing) {
-    music.play();
-    musicBtn.innerHTML = "⏸";
-  } else {
+  if (playing) {
     music.pause();
     musicBtn.innerHTML = "▶";
+  } else {
+    music.play();
+    musicBtn.innerHTML = "⏸";
   }
 
   playing = !playing;
